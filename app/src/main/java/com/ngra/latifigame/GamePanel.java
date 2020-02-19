@@ -19,6 +19,7 @@ import java.util.Random;
 
 public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
+
     private int GarbageCollection = 0;
     private MainActivity mainActivity;
     boolean SpeedUp = false;
@@ -31,7 +32,10 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     private MainThread thread;
     private Background background;
     private Player player;
+    private  Kilometers kilometers;
     private boolean Broken = false;
+    private float scaleFactorX;
+    private float scaleFactorY;
 
     private ArrayList<Missile_Benz> missile_benzs;
     private long missileBenzStartTime;
@@ -59,6 +63,9 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     private long mistakeChipsStartTime;
 
 
+    private ArrayList<Coin_Score> coin_scores;
+    private long coinStartTime;
+
 
     public GamePanel(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
@@ -70,6 +77,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     public GamePanel(Context context, MainActivity mainActivity) {
         super(context);
         this.mainActivity = mainActivity;
+        scaleFactorX = getWidth() / (WIDHT * 1.f);
+        scaleFactorY = getHeight() / (HEIGHT * 1.f);
         Broken = false;
         MOVESPEED = 5;
         getHolder().addCallback(this);
@@ -109,9 +118,15 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         background = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.road2));
         player = new Player(BitmapFactory.decodeResource(getResources(), R.drawable.player),
                 BitmapFactory.decodeResource(getResources(), R.drawable.mistake_player),
-                80,
-                229,
-                4);
+                81,
+                205,
+                4,
+                getWidth(),
+                getHeight());
+
+        kilometers = new Kilometers(getResources()
+        ,5,150,150,WIDHT / 2, getWidth(), getHeight());
+
 
         missile_benzs = new ArrayList<>();
         missileBenzStartTime = System.nanoTime();
@@ -143,6 +158,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         mistake_chips = new ArrayList<>();
         mistakeChipsStartTime = System.nanoTime();
 
+        coin_scores = new ArrayList<>();
+        coinStartTime = System.nanoTime();
 
 
         thread.setRunning(true);
@@ -238,8 +255,31 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             UpdateObjectMistake();
             MistakeCollisionGarbageCollection();
 
+            UpdateCoin();
+
 
         }
+    }
+
+
+    private void UpdateCoin() {
+        for(int i = 0; i < coin_scores.size(); i++) {
+            coin_scores.get(i).update();
+            if(coin_scores.get(i).getCount() > 8)
+                coin_scores.remove(i);
+        }
+    }
+
+
+
+
+    private void GetCoinScore() {
+        coin_scores.add(new Coin_Score(
+                getResources()
+                ,HalfDeviceWidth,
+                getWidth(),
+                getHeight()
+        ));
     }
 
 
@@ -422,6 +462,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             if (collisionScore(score_cocas.get(i), player)) {
                 score_cocas.remove(i);
                 GarbageCollection++;
+                GetCoinScore();
                 break;
             }
 
@@ -437,6 +478,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             if (collisionScore(score_paperBoxes.get(i), player)) {
                 score_paperBoxes.remove(i);
                 GarbageCollection++;
+                GetCoinScore();
                 break;
             }
 
@@ -452,6 +494,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             if (collisionScore(score_bottles.get(i), player)) {
                 score_bottles.remove(i);
                 GarbageCollection++;
+                GetCoinScore();
                 break;
             }
 
@@ -482,7 +525,9 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                                 85,
                                 85,
                                 player.getScore(),
-                                HalfDeviceWidth
+                                HalfDeviceWidth,
+                                getWidth(),
+                                getHeight()
                         )
                 );
             }
@@ -500,7 +545,9 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                                 80,
                                 61,
                                 player.getScore(),
-                                HalfDeviceWidth
+                                HalfDeviceWidth,
+                                getWidth(),
+                                getHeight()
                         )
                 );
             }
@@ -518,7 +565,9 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                                 65,
                                 65,
                                 player.getScore(),
-                                HalfDeviceWidth
+                                HalfDeviceWidth,
+                                getWidth(),
+                                getHeight()
                         )
                 );
             }
@@ -545,7 +594,9 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                                 55,
                                 80,
                                 player.getScore(),
-                                HalfDeviceWidth
+                                HalfDeviceWidth,
+                                getWidth(),
+                                getHeight()
                         )
                 );
             }
@@ -564,7 +615,9 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                                 70,
                                 70,
                                 player.getScore(),
-                                HalfDeviceWidth
+                                HalfDeviceWidth,
+                                getWidth(),
+                                getHeight()
                         )
                 );
             }
@@ -582,7 +635,9 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                                 70,
                                 78,
                                 player.getScore(),
-                                HalfDeviceWidth
+                                HalfDeviceWidth,
+                                getWidth(),
+                                getHeight()
                         )
                 );
             }
@@ -609,7 +664,9 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                                 162,
                                 player.getScore(),
                                 4,
-                                HalfDeviceWidth
+                                HalfDeviceWidth,
+                                getWidth(),
+                                getHeight()
                         )
                 );
             }
@@ -630,7 +687,9 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                                 171,
                                 player.getScore(),
                                 4,
-                                HalfDeviceWidth
+                                HalfDeviceWidth,
+                                getWidth(),
+                                getHeight()
                         )
                 );
             }
@@ -649,7 +708,9 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                                 161,
                                 player.getScore(),
                                 4,
-                                HalfDeviceWidth
+                                HalfDeviceWidth,
+                                getWidth(),
+                                getHeight()
                         )
                 );
             }
@@ -668,7 +729,9 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                                 166,
                                 player.getScore(),
                                 4,
-                                HalfDeviceWidth
+                                HalfDeviceWidth,
+                                getWidth(),
+                                getHeight()
                         )
                 );
             }
@@ -698,16 +761,18 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     public void draw(Canvas canvas) {
         super.draw(canvas);
 
-        final float scaleFactorX = getWidth() / (WIDHT * 1.f);
-        final float scaleFactorY = getHeight() / (HEIGHT * 1.f);
-
         if (canvas != null) {
             final int savedState = canvas.save();
 
+            scaleFactorX = getWidth() / (WIDHT * 1.f);
+            scaleFactorY = getHeight() / (HEIGHT * 1.f);
 
             canvas.scale(scaleFactorX, scaleFactorY);
             background.draw(canvas);
             player.draw(canvas);
+
+
+            kilometers.draw(canvas);
 
             for (Missile_Benz benz : missile_benzs)
                 benz.draw(canvas);
@@ -740,6 +805,9 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             for(Mistake_Chips chips : mistake_chips)
                 chips.draw(canvas);
 
+            for(Coin_Score coinScore : coin_scores)
+                coinScore.draw(canvas);
+
 
             drawScoreText(canvas);
             canvas.restoreToCount(savedState);
@@ -753,9 +821,14 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         paint.setTextSize(20);
         paint.setTypeface(mainActivity.textView.getTypeface());
         paint.setTextAlign(Paint.Align.RIGHT);
-        canvas.drawText("مقاومت : " + player.getScore(), WIDHT - 25, HEIGHT - 20, paint);
+        canvas.drawText("امتیاز  : " + GarbageCollection + " عدد", WIDHT - 50, 30, paint);
+
+        paint.setTextAlign(Paint.Align.LEFT);
+        canvas.drawText("مقاومت : " + player.getScore(), 25, 30, paint);
+
+        paint.setTextAlign(Paint.Align.RIGHT);
         canvas.drawText("سرعت  : " + MOVESPEED + " KM", WIDHT - 25, HEIGHT - 50, paint);
-        canvas.drawText("امتیاز  : " + GarbageCollection + " عدد", WIDHT - 25, HEIGHT - 80, paint);
+
     }
 
 }

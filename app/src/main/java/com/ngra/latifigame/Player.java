@@ -5,6 +5,9 @@ import android.graphics.Canvas;
 import android.os.Handler;
 import android.util.Log;
 
+import static com.ngra.latifigame.GamePanel.HEIGHT;
+import static com.ngra.latifigame.GamePanel.WIDHT;
+
 public class Player extends GameObject{
 
     private double SpeedScore;
@@ -20,10 +23,23 @@ public class Player extends GameObject{
     private int Delay = 350;
     private int SpeedMove = 25;
     private int Mistake = 0;
+    private float scaleFactorX;
+    private float scaleFactorY;
 
-    public Player(Bitmap res, Bitmap mistake, int w, int h, int numFrames) {
+    public Player(Bitmap res,
+                  Bitmap mistake,
+                  int w,
+                  int h,
+                  int numFrames,
+                  int DeviceWidth,
+                  int DeviceHeight) {
+
+
+        scaleFactorX = DeviceWidth / (WIDHT * 1.f);
+        scaleFactorY = DeviceHeight / (HEIGHT * 1.f);
+
         x = GamePanel.WIDHT / 2;
-        y = GamePanel.HEIGHT - (GamePanel.HEIGHT * 30 / 100);
+        y = GamePanel.HEIGHT -  (GamePanel.HEIGHT * 30 / 100) - ( h / 5);
 
         dy = 0;
         SpeedScore = 1;
@@ -85,18 +101,24 @@ public class Player extends GameObject{
     public void setNewX(int xNew, int HalfDevicewidth) {
 
         int w = HalfDevicewidth * 2;
-        double temp = (w  * 5) / 100;
+        double temp = (w  * 8) / 100;
         int left = (int) Math.round(temp);
         int right = w - left;
 
         if(xNew < left)
             xNew = left;
+
         if(xNew > right)
             xNew = right;
 
+        int NewW = width;
+        if(scaleFactorX < scaleFactorY) {
+            float dScale = scaleFactorY - scaleFactorX;
+            NewW = NewW + Math.round(NewW * dScale);
+        }
 
         if(xNew >= left && xNew <= right)
-            this.xNew = xNew - (width / 2);
+            this.xNew = xNew - (NewW / 2);
     }
 
     public void update() {
@@ -116,7 +138,7 @@ public class Player extends GameObject{
         }
         animation.update();
 
-        int difrentX;;
+        int difrentX;
 
         if(xNew < x) {
             difrentX = x - xNew;
@@ -159,7 +181,23 @@ public class Player extends GameObject{
     }
 
     public void draw(Canvas canvas) {
-        canvas.drawBitmap(animation.getImage(),x,y,null);
+        try {
+            Bitmap img = animation.getImage();
+            Bitmap resize = null;
+            if(scaleFactorX > scaleFactorY) {
+                float dScale = scaleFactorX - scaleFactorY;
+                int hImg = img.getHeight() + Math.round(img.getHeight() * dScale);
+                resize = Bitmap.createScaledBitmap(img, (int) (img.getWidth()), hImg, true);
+            }
+            else {
+                float dScale = scaleFactorY - scaleFactorX;
+                int wImg = img.getWidth() + Math.round(img.getWidth() * dScale);
+                resize = Bitmap.createScaledBitmap(img, wImg, (int) (img.getHeight()), true);
+            }
+            canvas.drawBitmap(resize, x, y, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public int getScore() {

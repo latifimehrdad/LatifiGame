@@ -7,6 +7,9 @@ import android.graphics.Canvas;
 
 import java.util.Random;
 
+import static com.ngra.latifigame.GamePanel.HEIGHT;
+import static com.ngra.latifigame.GamePanel.WIDHT;
+
 public class Missile_Lambo extends GameObject {
 
 
@@ -16,8 +19,22 @@ public class Missile_Lambo extends GameObject {
     private Animation animation = new Animation();
     private Bitmap spritesheet;
     private boolean TopToBottom = false;
+    private float scaleFactorX;
+    private float scaleFactorY;
 
-    public Missile_Lambo(Resources resources, int x, int y, int w, int h, int s, int numFrames, int HalfDeviceWidth) {
+    public Missile_Lambo(Resources resources,
+                         int x,
+                         int y,
+                         int w,
+                         int h,
+                         int s,
+                         int numFrames,
+                         int HalfDeviceWidth,
+                         int DeviceWidth,
+                         int DeviceHeight) {
+
+        scaleFactorX = DeviceWidth / (WIDHT * 1.f);
+        scaleFactorY = DeviceHeight / (HEIGHT * 1.f);
 
         int wTemp = HalfDeviceWidth * 2;
         double temp = (wTemp  * 5) / 100;
@@ -28,8 +45,12 @@ public class Missile_Lambo extends GameObject {
             x = left;
         }
 
-        if (right <= x + w) {
-            x = right - w - 10;
+        int NewW = w;
+        if(scaleFactorX < scaleFactorY)
+            NewW = Math.round(w * scaleFactorY);
+
+        if (right <= x + NewW) {
+            x = right - NewW - 10;
         }
 
         super.x = x;
@@ -39,10 +60,6 @@ public class Missile_Lambo extends GameObject {
         score = s;
 
         Bitmap[] image = new Bitmap[numFrames];
-
-
-
-
 
         if(x + width + 10<= HalfDeviceWidth) {
             TopToBottom = true;
@@ -102,7 +119,19 @@ public class Missile_Lambo extends GameObject {
 
     public void draw(Canvas canvas) {
         try {
-            canvas.drawBitmap(animation.getImage(), x, y, null);
+            Bitmap img = animation.getImage();
+            Bitmap resize = null;
+            if(scaleFactorX > scaleFactorY) {
+                float dScale = scaleFactorX - scaleFactorY;
+                int hImg = img.getHeight() + Math.round(img.getHeight() * dScale);
+                resize = Bitmap.createScaledBitmap(img, (int) (img.getWidth()), hImg, true);
+            }
+            else {
+                float dScale = scaleFactorY - scaleFactorX;
+                int wImg = img.getWidth() + Math.round(img.getWidth() * dScale);
+                resize = Bitmap.createScaledBitmap(img, wImg, (int) (img.getHeight()), true);
+            }
+            canvas.drawBitmap(resize, x, y, null);
         } catch (Exception e) {
             e.printStackTrace();
         }

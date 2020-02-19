@@ -4,29 +4,23 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.util.Log;
 
 import java.util.Random;
 
 import static com.ngra.latifigame.GamePanel.HEIGHT;
-import static com.ngra.latifigame.GamePanel.MOVESPEED;
 import static com.ngra.latifigame.GamePanel.WIDHT;
 
-public class Score_Coca extends GameObject {
+public class Coin_Score extends GameObject {
 
 
-    private int score;
-    private int speed;
-    private Random rand = new Random();
+    private Animation animation = new Animation();
     private Bitmap spritesheet;
+    private int count = 0;
     private float scaleFactorX;
     private float scaleFactorY;
 
-    public Score_Coca(Resources resources,
-                      int x,
-                      int y,
-                      int w,
-                      int h,
-                      int s,
+    public Coin_Score(Resources resources,
                       int HalfDeviceWidth,
                       int DeviceWidth,
                       int DeviceHeight) {
@@ -38,59 +32,51 @@ public class Score_Coca extends GameObject {
         int wTemp = HalfDeviceWidth * 2;
         double temp = (wTemp  * 5) / 100;
         int left = (int) Math.round(temp);
-        int right = wTemp - left;
+        int right = wTemp - left - 35;
 
-        if (left >= x) {
-            x = left;
-        }
+        super.x = right;
+        super.y = -30;
+        width = 35;
+        height = 74;
+        count = 0;
 
-        int NewW = w;
-        if(scaleFactorX < scaleFactorY)
-            NewW = Math.round(w * scaleFactorY);
-
-        if (right <= x + NewW) {
-            x = right - NewW - 10;
-        }
-
-        super.x = x;
-        super.y = y;
-        width = w;
-        height = h;
-        score = s;
-
+        Bitmap[] image = new Bitmap[9];
         spritesheet = BitmapFactory.decodeResource(
                 resources
-                , R.drawable.score_coca);
+                , R.drawable.coin_score);
 
-        int min = 0;
-        int max = 3;
-        int random = new Random().nextInt((max - min) + 1) + min;
-        speed = 2 + (score / 500) + random;
+
+        for (int i = 0; i < image.length; i++) {
+            image[i] = Bitmap.createBitmap(spritesheet, 0, i * height, width, height);
+        }
+
+        animation.setFrames(image);
+        animation.setDelay(30);
 
     }
 
 
     public void update() {
 
-        y += speed;
+        count++;
+        animation.update();
 
     }
 
     public void draw(Canvas canvas) {
         try {
-            Bitmap img = spritesheet;
-            Bitmap resize = null;
+            Bitmap img = animation.getImage();
             if(scaleFactorX > scaleFactorY) {
                 float dScale = scaleFactorX - scaleFactorY;
                 int hImg = img.getHeight() + Math.round(img.getHeight() * dScale);
-                resize = Bitmap.createScaledBitmap(img, (int) (img.getWidth()), hImg, true);
+                spritesheet = Bitmap.createScaledBitmap(img, (int) (img.getWidth()), hImg, true);
             }
             else {
                 float dScale = scaleFactorY - scaleFactorX;
                 int wImg = img.getWidth() + Math.round(img.getWidth() * dScale);
-                resize = Bitmap.createScaledBitmap(img, wImg, (int) (img.getHeight()), true);
+                spritesheet = Bitmap.createScaledBitmap(img, wImg, (int) (img.getHeight()), true);
             }
-            canvas.drawBitmap(resize, x, y, null);
+            canvas.drawBitmap(spritesheet, x, y, null);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -101,5 +87,7 @@ public class Score_Coca extends GameObject {
         return height - 10;
     }
 
-
+    public int getCount() {
+        return count;
+    }
 }
