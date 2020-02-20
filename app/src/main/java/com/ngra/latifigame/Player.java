@@ -39,7 +39,7 @@ public class Player extends GameObject{
 //        scaleFactorY = DeviceHeight / (HEIGHT * 1.f);
 
         x = GamePanel.WIDHT / 2;
-        y = GamePanel.HEIGHT -  (GamePanel.HEIGHT * 30 / 100) - ( h / 5);
+        y = GamePanel.HEIGHT -  (GamePanel.HEIGHT * 30 / 100) - ( h / 6);
 
         dy = 0;
         SpeedScore = 1;

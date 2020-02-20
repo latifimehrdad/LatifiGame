@@ -279,7 +279,9 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                 getResources()
                 ,HalfDeviceWidth,
                 getWidth(),
-                getHeight()
+                getHeight(),
+                player.getX(),
+                player.getY()
         ));
     }
 
@@ -771,7 +773,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             canvas.scale(scaleFactorX, scaleFactorY);
             background.draw(canvas);
             player.draw(canvas);
-            kilometers.draw(canvas, player.getSpeedScore());
+
 
             for (Missile_Benz benz : missile_benzs)
                 benz.draw(canvas);
@@ -820,13 +822,19 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         paint.setTextSize(20);
         paint.setTypeface(mainActivity.textView.getTypeface());
         paint.setTextAlign(Paint.Align.RIGHT);
-        canvas.drawText("امتیاز  : " + GarbageCollection + " عدد", WIDHT - 50, 30, paint);
 
-        paint.setTextAlign(Paint.Align.LEFT);
-        canvas.drawText("مقاومت : " + player.getScore(), 25, 30, paint);
+        canvas.drawBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.single_coin),WIDHT - 53,10,null);
+        canvas.drawText(String.valueOf(GarbageCollection), WIDHT - 60, 30, paint);
 
-        paint.setTextAlign(Paint.Align.RIGHT);
-        canvas.drawText("سرعت  : " + MOVESPEED + " KM", WIDHT - 25, HEIGHT - 50, paint);
+        paint.setTextAlign(Paint.Align.CENTER);
+        kilometers.draw(canvas, player.getSpeedScore(), player.getScore(),paint);
+//
+//
+//        paint.setTextAlign(Paint.Align.LEFT);
+//        canvas.drawText("مقاومت : " + player.getScore(), 25, 30, paint);
+//
+//        paint.setTextAlign(Paint.Align.RIGHT);
+//        canvas.drawText("سرعت  : " + MOVESPEED + " KM", WIDHT - 25, HEIGHT - 50, paint);
 
     }
 

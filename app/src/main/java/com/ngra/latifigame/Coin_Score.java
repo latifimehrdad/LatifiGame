@@ -23,7 +23,9 @@ public class Coin_Score extends GameObject {
     public Coin_Score(Resources resources,
                       int HalfDeviceWidth,
                       int DeviceWidth,
-                      int DeviceHeight) {
+                      int DeviceHeight,
+                      int PlayerX,
+                      int PlayerY) {
 
 
         scaleFactorX = DeviceWidth / (WIDHT * 1.f);
@@ -34,8 +36,8 @@ public class Coin_Score extends GameObject {
         int left = (int) Math.round(temp);
         int right = wTemp - left - 35;
 
-        super.x = right;
-        super.y = -30;
+        super.x = PlayerX + 20;
+        super.y = PlayerY - 60;
         width = 35;
         height = 74;
         count = 0;
