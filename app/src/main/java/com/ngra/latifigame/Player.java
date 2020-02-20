@@ -2,11 +2,6 @@ package com.ngra.latifigame;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.os.Handler;
-import android.util.Log;
-
-import static com.ngra.latifigame.GamePanel.HEIGHT;
-import static com.ngra.latifigame.GamePanel.WIDHT;
 
 public class Player extends GameObject{
 

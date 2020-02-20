@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -210,7 +211,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         if (player.getPlaying()) {
             background.update();
             player.update();
-
 
 
             if (player.getScore() % 70 == 0) {
@@ -464,7 +464,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             score_cocas.get(i).update();
             if (collisionScore(score_cocas.get(i), player)) {
                 score_cocas.remove(i);
-                GarbageCollection++;
+                GarbageCollection += 3;
                 GetCoinScore();
                 break;
             }
@@ -496,7 +496,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             score_bottles.get(i).update();
             if (collisionScore(score_bottles.get(i), player)) {
                 score_bottles.remove(i);
-                GarbageCollection++;
+                GarbageCollection += 2;
                 GetCoinScore();
                 break;
             }
