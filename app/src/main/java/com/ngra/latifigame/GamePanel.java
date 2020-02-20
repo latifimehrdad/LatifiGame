@@ -212,6 +212,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             player.update();
 
 
+
             if (player.getScore() % 70 == 0) {
                 if (!SpeedUp) {
                     player.setSpeedScore();
@@ -770,9 +771,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             canvas.scale(scaleFactorX, scaleFactorY);
             background.draw(canvas);
             player.draw(canvas);
-
-
-            kilometers.draw(canvas);
+            kilometers.draw(canvas, player.getSpeedScore());
 
             for (Missile_Benz benz : missile_benzs)
                 benz.draw(canvas);

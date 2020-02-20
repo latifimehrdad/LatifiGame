@@ -23,8 +23,8 @@ public class Player extends GameObject{
     private int Delay = 350;
     private int SpeedMove = 25;
     private int Mistake = 0;
-    private float scaleFactorX;
-    private float scaleFactorY;
+//    private float scaleFactorX;
+//    private float scaleFactorY;
 
     public Player(Bitmap res,
                   Bitmap mistake,
@@ -35,8 +35,8 @@ public class Player extends GameObject{
                   int DeviceHeight) {
 
 
-        scaleFactorX = DeviceWidth / (WIDHT * 1.f);
-        scaleFactorY = DeviceHeight / (HEIGHT * 1.f);
+//        scaleFactorX = DeviceWidth / (WIDHT * 1.f);
+//        scaleFactorY = DeviceHeight / (HEIGHT * 1.f);
 
         x = GamePanel.WIDHT / 2;
         y = GamePanel.HEIGHT -  (GamePanel.HEIGHT * 30 / 100) - ( h / 5);
@@ -111,14 +111,14 @@ public class Player extends GameObject{
         if(xNew > right)
             xNew = right;
 
-        int NewW = width;
-        if(scaleFactorX < scaleFactorY) {
-            float dScale = scaleFactorY - scaleFactorX;
-            NewW = NewW + Math.round(NewW * dScale);
-        }
+//        int NewW = width;
+//        if(scaleFactorX < scaleFactorY) {
+//            float dScale = scaleFactorY - scaleFactorX;
+//            NewW = NewW + Math.round(NewW * dScale);
+//        }
 
         if(xNew >= left && xNew <= right)
-            this.xNew = xNew - (NewW / 2);
+            this.xNew = xNew - (width / 2);
     }
 
     public void update() {
@@ -183,18 +183,18 @@ public class Player extends GameObject{
     public void draw(Canvas canvas) {
         try {
             Bitmap img = animation.getImage();
-            Bitmap resize = null;
-            if(scaleFactorX > scaleFactorY) {
-                float dScale = scaleFactorX - scaleFactorY;
-                int hImg = img.getHeight() + Math.round(img.getHeight() * dScale);
-                resize = Bitmap.createScaledBitmap(img, (int) (img.getWidth()), hImg, true);
-            }
-            else {
-                float dScale = scaleFactorY - scaleFactorX;
-                int wImg = img.getWidth() + Math.round(img.getWidth() * dScale);
-                resize = Bitmap.createScaledBitmap(img, wImg, (int) (img.getHeight()), true);
-            }
-            canvas.drawBitmap(resize, x, y, null);
+//            Bitmap resize = null;
+//            if(scaleFactorX > scaleFactorY) {
+//                float dScale = scaleFactorX - scaleFactorY;
+//                int hImg = img.getHeight() + Math.round(img.getHeight() * dScale);
+//                resize = Bitmap.createScaledBitmap(img, (int) (img.getWidth()), hImg, true);
+//            }
+//            else {
+//                float dScale = scaleFactorY - scaleFactorX;
+//                int wImg = img.getWidth() + Math.round(img.getWidth() * dScale);
+//                resize = Bitmap.createScaledBitmap(img, wImg, (int) (img.getHeight()), true);
+//            }
+            canvas.drawBitmap(animation.getImage(), x, y, null);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -16,8 +16,8 @@ public class Score_Bottle extends GameObject {
     private int score;
     private int speed;
     private Bitmap spritesheet;
-    private float scaleFactorX;
-    private float scaleFactorY;
+//    private float scaleFactorX;
+//    private float scaleFactorY;
 
     public Score_Bottle(Resources resources,
                         int x,
@@ -29,8 +29,8 @@ public class Score_Bottle extends GameObject {
                         int DeviceWidth,
                         int DeviceHeight) {
 
-        scaleFactorX = DeviceWidth / (WIDHT * 1.f);
-        scaleFactorY = DeviceHeight / (HEIGHT * 1.f);
+//        scaleFactorX = DeviceWidth / (WIDHT * 1.f);
+//        scaleFactorY = DeviceHeight / (HEIGHT * 1.f);
 
         int wTemp = HalfDeviceWidth * 2;
         double temp = (wTemp  * 5) / 100;
@@ -40,13 +40,13 @@ public class Score_Bottle extends GameObject {
         if (left >= x) {
             x = left;
         }
+//
+//        int NewW = w;
+//        if(scaleFactorX < scaleFactorY)
+//            NewW = Math.round(w * scaleFactorY);
 
-        int NewW = w;
-        if(scaleFactorX < scaleFactorY)
-            NewW = Math.round(w * scaleFactorY);
-
-        if (right <= x + NewW) {
-            x = right - NewW - 10;
+        if (right <= x + w) {
+            x = right - w - 10;
         }
 
         super.x = x;
@@ -76,18 +76,18 @@ public class Score_Bottle extends GameObject {
     public void draw(Canvas canvas) {
         try {
             Bitmap img = spritesheet;
-            Bitmap resize = null;
-            if(scaleFactorX > scaleFactorY) {
-                float dScale = scaleFactorX - scaleFactorY;
-                int hImg = img.getHeight() + Math.round(img.getHeight() * dScale);
-                resize = Bitmap.createScaledBitmap(img, (int) (img.getWidth()), hImg, true);
-            }
-            else {
-                float dScale = scaleFactorY - scaleFactorX;
-                int wImg = img.getWidth() + Math.round(img.getWidth() * dScale);
-                resize = Bitmap.createScaledBitmap(img, wImg, (int) (img.getHeight()), true);
-            }
-            canvas.drawBitmap(resize, x, y, null);
+//            Bitmap resize = null;
+//            if(scaleFactorX > scaleFactorY) {
+//                float dScale = scaleFactorX - scaleFactorY;
+//                int hImg = img.getHeight() + Math.round(img.getHeight() * dScale);
+//                resize = Bitmap.createScaledBitmap(img, (int) (img.getWidth()), hImg, true);
+//            }
+//            else {
+//                float dScale = scaleFactorY - scaleFactorX;
+//                int wImg = img.getWidth() + Math.round(img.getWidth() * dScale);
+//                resize = Bitmap.createScaledBitmap(img, wImg, (int) (img.getHeight()), true);
+//            }
+            canvas.drawBitmap(spritesheet, x, y, null);
         } catch (Exception e) {
             e.printStackTrace();
         }
