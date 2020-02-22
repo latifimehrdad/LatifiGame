@@ -55,7 +55,6 @@ public class Kilometers extends GameObject {
             int hImg = img.getHeight() + Math.round(img.getHeight() * dScale);
             spritesheet = Bitmap.createScaledBitmap(img, (int) (img.getWidth()), hImg, true);
 
-
         } else {
             float dScale = scaleFactorY - scaleFactorX;
             int wImg = img.getWidth() + Math.round(img.getWidth() * dScale);
@@ -103,12 +102,12 @@ public class Kilometers extends GameObject {
     }
 
 
-    public void draw(Canvas canvas, double SpeedScore, int score, Paint paint) {
+    public void draw(Canvas canvas, double SpeedScore, int score, Paint paint, boolean playing) {
         try {
             canvas.drawBitmap(spritesheet, x, y, null);
             int xArrow = x + ((spritesheet.getWidth() - Arrow.getWidth()) / 2);
             int yArrow = y + ((spritesheet.getHeight() - Arrow.getHeight()) / 2);
-            if (score > 35)
+            if (score > 35 && playing)
                 update(MOVESPEED, (float) SpeedScore);
             canvas.drawBitmap(Arrow, xArrow, yArrow, null);
             paint.setColor(Color.BLACK);

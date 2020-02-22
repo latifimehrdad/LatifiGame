@@ -1,6 +1,8 @@
 package com.ngra.latifigame;
 
 import android.app.Activity;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -15,6 +17,7 @@ public class MainActivity extends Activity {
     TextView textView;
     LinearLayout layout;
     GamePanel gamePanel;
+    private MediaPlayer mediaCoin;
 
 
     @Override
@@ -48,8 +51,6 @@ public class MainActivity extends Activity {
                 layout.addView(gamePanel);
             }
         });
-
-
 
         //setContentView(new GamePanel(this));
     }

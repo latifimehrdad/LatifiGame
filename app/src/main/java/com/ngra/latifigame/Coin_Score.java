@@ -4,6 +4,8 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.util.Log;
 
 import java.util.Random;
@@ -30,6 +32,7 @@ public class Coin_Score extends GameObject {
 
         scaleFactorX = DeviceWidth / (WIDHT * 1.f);
         scaleFactorY = DeviceHeight / (HEIGHT * 1.f);
+
 
         int wTemp = HalfDeviceWidth * 2;
         double temp = (wTemp  * 5) / 100;

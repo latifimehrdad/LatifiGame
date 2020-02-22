@@ -1,12 +1,15 @@
 package com.ngra.latifigame;
 
 import android.content.Context;
+import android.content.res.AssetFileDescriptor;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -14,8 +17,12 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
@@ -30,13 +37,17 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     public static int HEIGHT = 900;
     public static int HalfDeviceWidth = 0;
     public static int MOVESPEED = 5;
+    private int StartSound = 0;
     private MainThread thread;
     private Background background;
     private Player player;
-    private  Kilometers kilometers;
+    private Kilometers kilometers;
     private boolean Broken = false;
     private float scaleFactorX;
     private float scaleFactorY;
+    private MediaPlayer mediaPlayer;
+    private MediaPlayer mediaCoin;
+    private MediaPlayer mediaBip;
 
     private ArrayList<Missile_Benz> missile_benzs;
     private long missileBenzStartTime;
@@ -126,7 +137,61 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                 getHeight());
 
         kilometers = new Kilometers(getResources()
-        ,5,150,150,WIDHT / 2, getWidth(), getHeight());
+                , 5, 150, 150, WIDHT / 2, getWidth(), getHeight());
+
+        StartSound = 0;
+
+        if (mediaPlayer == null)
+            mediaPlayer = new MediaPlayer();
+        try {
+            if (mediaPlayer.isPlaying()) {
+                mediaPlayer.stop();
+            }
+
+            mediaPlayer = null;
+            mediaPlayer = new MediaPlayer();
+            String fileName = "android.resource://" + mainActivity.getPackageName() + "/" + R.raw.truck_sound;
+            mediaPlayer.setDataSource(mainActivity, Uri.parse(fileName));
+            mediaPlayer.prepare();
+        } catch (Exception e) {
+        }
+
+
+        if (mediaCoin == null)
+            mediaCoin = new MediaPlayer();
+
+        try {
+            if (mediaCoin.isPlaying()) {
+                mediaCoin.stop();
+            }
+
+            mediaCoin = null;
+            mediaCoin = new MediaPlayer();
+            String fileName = "android.resource://" + mainActivity.getPackageName() + "/" + R.raw.coin_sound;
+            mediaCoin.setDataSource(mainActivity, Uri.parse(fileName));
+            mediaCoin.prepare();
+
+        } catch (Exception e) {
+        }
+
+
+
+        if (mediaBip == null)
+            mediaBip = new MediaPlayer();
+
+        try {
+            if (mediaBip.isPlaying()) {
+                mediaBip.stop();
+            }
+
+            mediaBip = null;
+            mediaBip = new MediaPlayer();
+            String fileName = "android.resource://" + mainActivity.getPackageName() + "/" + R.raw.bip_sound;
+            mediaBip.setDataSource(mainActivity, Uri.parse(fileName));
+            mediaBip.prepare();
+
+        } catch (Exception e) {
+        }
 
 
         missile_benzs = new ArrayList<>();
@@ -175,6 +240,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             if (!player.getPlaying() && !Broken) {
                 player.setPlaying(true);
+                mediaPlayer.start();
             } else if (Broken) {
                 mainActivity.ResetGame();
             }
@@ -186,7 +252,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             if (Broken) {
                 mainActivity.ResetGame();
             } else {
-                player.setPlaying(false);
+                //player.setPlaying(false);
             }
             return true;
         }
@@ -206,7 +272,13 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     }
 
 
+    private void CoinSound() {
+        mediaCoin.start();
+    }
+
+
     public void update() {
+
 
         if (player.getPlaying()) {
             background.update();
@@ -245,7 +317,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             }
 
 
-
             UpdateObjectMissile();
             CollisionMissile();
 
@@ -264,20 +335,18 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
 
     private void UpdateCoin() {
-        for(int i = 0; i < coin_scores.size(); i++) {
+        for (int i = 0; i < coin_scores.size(); i++) {
             coin_scores.get(i).update();
-            if(coin_scores.get(i).getCount() > 8)
+            if (coin_scores.get(i).getCount() > 8)
                 coin_scores.remove(i);
         }
     }
 
 
-
-
     private void GetCoinScore() {
         coin_scores.add(new Coin_Score(
                 getResources()
-                ,HalfDeviceWidth,
+                , HalfDeviceWidth,
                 getWidth(),
                 getHeight(),
                 player.getX(),
@@ -309,16 +378,13 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     }
 
 
-
-
     private void UpdateObjectMistake() {
 
-        for(int i = 0; i < mistake_recyclerBins.size(); i++) {
+        for (int i = 0; i < mistake_recyclerBins.size(); i++) {
             mistake_recyclerBins.get(i).update();
         }
 
     }
-
 
 
     private void UpdateObjectScore() {
@@ -401,19 +467,19 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     }
 
 
-
     private void MistakeCollisionGarbageCollection() {
 
         for (int i = 0; i < mistake_recyclerBins.size(); i++) {
             mistake_recyclerBins.get(i).update();
             if (collisionScore(mistake_recyclerBins.get(i), player)) {
                 mistake_recyclerBins.remove(i);
-                GarbageCollection--;
+                GarbageCollection-=3;
+                mediaBip.start();
                 player.MistakeCollection();
                 break;
             }
 
-            if (mistake_recyclerBins.get(i).getY() >  HEIGHT + 100) {
+            if (mistake_recyclerBins.get(i).getY() > HEIGHT + 100) {
                 mistake_recyclerBins.remove(i);
                 break;
             }
@@ -423,7 +489,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             mistake_babyDiapers.get(i).update();
             if (collisionScore(mistake_babyDiapers.get(i), player)) {
                 mistake_babyDiapers.remove(i);
-                GarbageCollection--;
+                GarbageCollection-=3;
+                mediaBip.start();
                 player.MistakeCollection();
                 break;
             }
@@ -439,7 +506,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             mistake_chips.get(i).update();
             if (collisionScore(mistake_chips.get(i), player)) {
                 mistake_chips.remove(i);
-                GarbageCollection--;
+                GarbageCollection-=3;
+                mediaBip.start();
                 player.MistakeCollection();
                 break;
             }
@@ -450,9 +518,12 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             }
         }
 
-        if(GarbageCollection < 0) {
+        if (GarbageCollection < 0) {
             Broken = true;
             player.setPlaying(false);
+            mediaPlayer.stop();
+            mediaPlayer.release();
+            mediaPlayer = null;
         }
 
     }
@@ -465,6 +536,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             if (collisionScore(score_cocas.get(i), player)) {
                 score_cocas.remove(i);
                 GarbageCollection += 3;
+                CoinSound();
                 GetCoinScore();
                 break;
             }
@@ -481,6 +553,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             if (collisionScore(score_paperBoxes.get(i), player)) {
                 score_paperBoxes.remove(i);
                 GarbageCollection++;
+                CoinSound();
                 GetCoinScore();
                 break;
             }
@@ -497,6 +570,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             if (collisionScore(score_bottles.get(i), player)) {
                 score_bottles.remove(i);
                 GarbageCollection += 2;
+                CoinSound();
                 GetCoinScore();
                 break;
             }
@@ -576,7 +650,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             }
         }
     }
-
 
 
     private void DrawMistakes() {
@@ -746,6 +819,9 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         if (Rect.intersects(a.getRectangle(), b.getRectangle())) {
             Broken = true;
             player.setPlaying(false);
+            mediaPlayer.stop();
+            mediaPlayer.release();
+            mediaPlayer = null;
             return true;
         }
         return false;
@@ -797,16 +873,16 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             for (Score_Bottle bottle : score_bottles)
                 bottle.draw(canvas);
 
-            for(Mistake_RecyclerBin recyclerBin : mistake_recyclerBins)
+            for (Mistake_RecyclerBin recyclerBin : mistake_recyclerBins)
                 recyclerBin.draw(canvas);
 
-            for(Mistake_BabyDiaper babyDiaper : mistake_babyDiapers)
+            for (Mistake_BabyDiaper babyDiaper : mistake_babyDiapers)
                 babyDiaper.draw(canvas);
 
-            for(Mistake_Chips chips : mistake_chips)
+            for (Mistake_Chips chips : mistake_chips)
                 chips.draw(canvas);
 
-            for(Coin_Score coinScore : coin_scores)
+            for (Coin_Score coinScore : coin_scores)
                 coinScore.draw(canvas);
 
 
@@ -823,11 +899,11 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         paint.setTypeface(mainActivity.textView.getTypeface());
         paint.setTextAlign(Paint.Align.RIGHT);
 
-        canvas.drawBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.single_coin),WIDHT - 53,10,null);
+        canvas.drawBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.single_coin), WIDHT - 53, 10, null);
         canvas.drawText(String.valueOf(GarbageCollection), WIDHT - 60, 30, paint);
 
         paint.setTextAlign(Paint.Align.CENTER);
-        kilometers.draw(canvas, player.getSpeedScore(), player.getScore(),paint);
+        kilometers.draw(canvas, player.getSpeedScore(), player.getScore(), paint, player.getPlaying());
 //
 //
 //        paint.setTextAlign(Paint.Align.LEFT);
