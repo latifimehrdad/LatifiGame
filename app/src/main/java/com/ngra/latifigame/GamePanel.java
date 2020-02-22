@@ -1,7 +1,6 @@
 package com.ngra.latifigame;
 
 import android.content.Context;
-import android.content.res.AssetFileDescriptor;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 
@@ -10,19 +9,12 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.media.MediaPlayer;
 import android.net.Uri;
-import android.os.Handler;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
 
 
 public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
@@ -37,7 +29,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     public static int HEIGHT = 900;
     public static int HalfDeviceWidth = 0;
     public static int MOVESPEED = 5;
-    private int StartSound = 0;
     private MainThread thread;
     private Background background;
     private Player player;
@@ -45,7 +36,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     private boolean Broken = false;
     private float scaleFactorX;
     private float scaleFactorY;
-    private MediaPlayer mediaPlayer;
+    private MediaPlayer mediaPlayer = new MediaPlayer();
     private MediaPlayer mediaCoin;
     private MediaPlayer mediaBip;
 
@@ -76,7 +67,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
 
     private ArrayList<Coin_Score> coin_scores;
-    private long coinStartTime;
 
 
     public GamePanel(Context context, AttributeSet attributeSet) {
@@ -139,7 +129,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         kilometers = new Kilometers(getResources()
                 , 5, 150, 150, WIDHT / 2, getWidth(), getHeight());
 
-        StartSound = 0;
 
         if (mediaPlayer == null)
             mediaPlayer = new MediaPlayer();
@@ -153,7 +142,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             String fileName = "android.resource://" + mainActivity.getPackageName() + "/" + R.raw.truck_sound;
             mediaPlayer.setDataSource(mainActivity, Uri.parse(fileName));
             mediaPlayer.prepare();
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
 
 
@@ -171,7 +160,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             mediaCoin.setDataSource(mainActivity, Uri.parse(fileName));
             mediaCoin.prepare();
 
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
 
 
@@ -190,7 +179,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             mediaBip.setDataSource(mainActivity, Uri.parse(fileName));
             mediaBip.prepare();
 
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
 
 
@@ -225,7 +214,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         mistakeChipsStartTime = System.nanoTime();
 
         coin_scores = new ArrayList<>();
-        coinStartTime = System.nanoTime();
 
 
         thread.setRunning(true);
@@ -589,7 +577,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         int max = 3;
         int random = new Random().nextInt((max - min) + 1) + min;
         if (random == 1) {
-            Long scoreCocaElapsed = (System.nanoTime() - scoreColaStatTime) / 1000000;
+            long scoreCocaElapsed = (System.nanoTime() - scoreColaStatTime) / 1000000;
             if (scoreCocaElapsed > (2000) - player.getScore() / 4) {
                 min = 1;
                 max = WIDHT;
@@ -609,7 +597,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                 );
             }
         } else if (random == 2) {
-            Long scorePaperElapsed = (System.nanoTime() - scorePaperBoxStartTime) / 1000000;
+            long scorePaperElapsed = (System.nanoTime() - scorePaperBoxStartTime) / 1000000;
             if (scorePaperElapsed > (2000) - player.getScore() / 4) {
                 min = 1;
                 max = WIDHT;
@@ -629,7 +617,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                 );
             }
         } else if (random == 3) {
-            Long scoreBottleElapsed = (System.nanoTime() - scoreBottleStartTime) / 1000000;
+            long scoreBottleElapsed = (System.nanoTime() - scoreBottleStartTime) / 1000000;
             if (scoreBottleElapsed > (2000) - player.getScore() / 4) {
                 min = 1;
                 max = WIDHT;
@@ -657,7 +645,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         int max = 3;
         int random = new Random().nextInt((max - min) + 1) + min;
         if (random == 1) {
-            Long mistakeRecyclerElapsed = (System.nanoTime() - mistakeRecyclerBinStartTime) / 1000000;
+            long mistakeRecyclerElapsed = (System.nanoTime() - mistakeRecyclerBinStartTime) / 1000000;
             if (mistakeRecyclerElapsed > (2000) - player.getScore() / 4) {
                 min = 1;
                 max = WIDHT;
@@ -678,7 +666,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             }
 
         } else if (random == 2) {
-            Long mistakeBabyElapsed = (System.nanoTime() - mistakeBabyDiaperStartTime) / 1000000;
+            long mistakeBabyElapsed = (System.nanoTime() - mistakeBabyDiaperStartTime) / 1000000;
             if (mistakeBabyElapsed > (2000) - player.getScore() / 4) {
                 min = 1;
                 max = WIDHT;
@@ -698,7 +686,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                 );
             }
         } else if (random == 3) {
-            Long mistakeChipsElapsed = (System.nanoTime() - mistakeChipsStartTime) / 1000000;
+            long mistakeChipsElapsed = (System.nanoTime() - mistakeChipsStartTime) / 1000000;
             if (mistakeChipsElapsed > (2000) - player.getScore() / 4) {
                 min = 1;
                 max = WIDHT;
@@ -726,7 +714,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         int max = 4;
         int random = new Random().nextInt((max - min) + 1) + min;
         if (random == 1) {
-            Long missileBenzElapsed = (System.nanoTime() - missileBenzStartTime) / 1000000;
+            long missileBenzElapsed = (System.nanoTime() - missileBenzStartTime) / 1000000;
             if (missileBenzElapsed > (2000) - player.getScore() / 4) {
                 min = 1;
                 max = WIDHT;
@@ -749,7 +737,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
         } else if (random == 2) {
 
-            Long missileRedCarElapsed = (System.nanoTime() - missileRedCarStartTime) / 1000000;
+            long missileRedCarElapsed = (System.nanoTime() - missileRedCarStartTime) / 1000000;
             if (missileRedCarElapsed > (2000) - player.getScore() / 4) {
                 min = 1;
                 max = WIDHT;
@@ -770,7 +758,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                 );
             }
         } else if (random == 3) {
-            Long missileCorvateElapsed = (System.nanoTime() - missileCorvateStartTime) / 1000000;
+            long missileCorvateElapsed = (System.nanoTime() - missileCorvateStartTime) / 1000000;
             if (missileCorvateElapsed > (2000) - player.getScore() / 4) {
                 min = 1;
                 max = WIDHT;
@@ -791,7 +779,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                 );
             }
         } else {
-            Long missileLamboElapsed = (System.nanoTime() - missileLambostartTime) / 1000000;
+            long missileLamboElapsed = (System.nanoTime() - missileLambostartTime) / 1000000;
             if (missileLamboElapsed > (2000) - player.getScore() / 4) {
                 min = 1;
                 max = WIDHT;
@@ -829,10 +817,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
 
     public boolean collisionScore(GameObject a, GameObject b) {
-        if (Rect.intersects(a.getRectangle(), b.getRectangle())) {
-            return true;
-        }
-        return false;
+        return Rect.intersects(a.getRectangle(), b.getRectangle());
     }
 
 
