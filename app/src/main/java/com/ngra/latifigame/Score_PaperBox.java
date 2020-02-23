@@ -64,7 +64,8 @@ public class Score_PaperBox extends GameObject {
         int min = 0;
         int max = 3;
         int random = new Random().nextInt((max - min) + 1) + min;
-        speed = 2 + (score / 500) + random;
+        //speed = 2 + (score / 500) + random;
+        speed = 2 + (MOVESPEED / 12) + random + (MOVESPEED / 20);
 
     }
 

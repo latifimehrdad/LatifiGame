@@ -7,30 +7,25 @@ import android.graphics.Canvas;
 
 import java.util.Random;
 
-import static com.ngra.latifigame.GamePanel.HEIGHT;
 import static com.ngra.latifigame.GamePanel.MOVESPEED;
-import static com.ngra.latifigame.GamePanel.WIDHT;
 
-public class Score_Coca extends GameObject {
+public class Fuel extends GameObject {
 
 
     private int score;
     private int speed;
-    private Random rand = new Random();
     private Bitmap spritesheet;
-//    private float scaleFactorX;
-//    private float scaleFactorY;
 
-    public Score_Coca(Resources resources,
-                      int x,
-                      int y,
-                      int w,
-                      int h,
-                      int s,
-                      int HalfDeviceWidth,
-                      int DeviceWidth,
-                      int DeviceHeight) {
 
+    public Fuel(Resources resources,
+                        int x,
+                        int y,
+                        int w,
+                        int h,
+                        int s,
+                        int HalfDeviceWidth,
+                        int DeviceWidth,
+                        int DeviceHeight) {
 
 //        scaleFactorX = DeviceWidth / (WIDHT * 1.f);
 //        scaleFactorY = DeviceHeight / (HEIGHT * 1.f);
@@ -43,7 +38,7 @@ public class Score_Coca extends GameObject {
         if (left >= x) {
             x = left;
         }
-
+//
 //        int NewW = w;
 //        if(scaleFactorX < scaleFactorY)
 //            NewW = Math.round(w * scaleFactorY);
@@ -60,13 +55,13 @@ public class Score_Coca extends GameObject {
 
         spritesheet = BitmapFactory.decodeResource(
                 resources
-                , R.drawable.score_coca);
+                , R.drawable.fuel);
 
         int min = 0;
         int max = 3;
         int random = new Random().nextInt((max - min) + 1) + min;
         //speed = 2 + (score / 500) + random;
-        speed = 2 + (MOVESPEED / 12) + random + (MOVESPEED / 20);
+        speed = 2 + (MOVESPEED / 12) + random + (MOVESPEED / 10);
 
     }
 
@@ -79,7 +74,7 @@ public class Score_Coca extends GameObject {
 
     public void draw(Canvas canvas) {
         try {
-//            Bitmap img = spritesheet;
+            Bitmap img = spritesheet;
 //            Bitmap resize = null;
 //            if(scaleFactorX > scaleFactorY) {
 //                float dScale = scaleFactorX - scaleFactorY;

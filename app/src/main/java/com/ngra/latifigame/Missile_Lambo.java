@@ -8,6 +8,7 @@ import android.graphics.Canvas;
 import java.util.Random;
 
 import static com.ngra.latifigame.GamePanel.HEIGHT;
+import static com.ngra.latifigame.GamePanel.MOVESPEED;
 import static com.ngra.latifigame.GamePanel.WIDHT;
 
 public class Missile_Lambo extends GameObject {
@@ -89,14 +90,21 @@ public class Missile_Lambo extends GameObject {
         }
 
 
-        if (TopToBottom)
+        //int speedTest;
+        if (TopToBottom) {
             //speed = 7 + (score / 200);
-            speed = 7 + (int) (rand.nextDouble() * (score / 30)) + (score / 90);
+            double round = rand.nextDouble();
+            //speed = 7 + (int) (round * (score / 30)) + (score / 90);
+            speed = 7 + (int) (round * MOVESPEED + (MOVESPEED * 2.5 / 5 * round) + (MOVESPEED / 5));
+            //Log.i("game","LEFT speed : " + speed + " speedTest : "+speedTest);
+        }
         else {
             int min = 0;
             int max = 3;
             int random = new Random().nextInt((max - min) + 1) + min;
-            speed = 2 + (score / 500) + random;
+            //speed = 2 + (score / 500) + random;
+            speed = 2 + (MOVESPEED / 12) + random + (MOVESPEED / 20);
+            //Log.i("game","RIGHT speed : " + speed + " speedTest : "+speedTest);
         }
 
 

@@ -89,6 +89,17 @@ public class Player extends GameObject{
             SpeedMove = 7;
     }
 
+
+    public void SetLowOfDelayAnimation() {
+        Delay = Delay + 10;
+        if(Delay < 40)
+            Delay = 40;
+        animation.setDelay(Delay);
+        //SpeedMove = Delay / 3;
+        if(SpeedMove < 7)
+            SpeedMove = 7;
+    }
+
     public void setUp(boolean b){
          up = b;
     }
@@ -169,6 +180,13 @@ public class Player extends GameObject{
 
     public void setSpeedScore() {
         SpeedScore = SpeedScore + 0.2;
+    }
+
+
+    public void setLowOfSpeedScore() {
+        SpeedScore = SpeedScore - 0.2;
+        if(SpeedScore < 1)
+            SpeedScore = 1;
     }
 
     public double getSpeedScore() {

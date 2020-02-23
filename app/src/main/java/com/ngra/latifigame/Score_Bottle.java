@@ -6,9 +6,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 
 import java.util.Random;
-
-import static com.ngra.latifigame.GamePanel.HEIGHT;
-import static com.ngra.latifigame.GamePanel.WIDHT;
+import static com.ngra.latifigame.GamePanel.MOVESPEED;
 
 public class Score_Bottle extends GameObject {
 
@@ -62,7 +60,8 @@ public class Score_Bottle extends GameObject {
         int min = 0;
         int max = 3;
         int random = new Random().nextInt((max - min) + 1) + min;
-        speed = 2 + (score / 500) + random;
+        //speed = 2 + (score / 500) + random;
+        speed = 2 + (MOVESPEED / 12) + random + (MOVESPEED / 20);
 
     }
 
