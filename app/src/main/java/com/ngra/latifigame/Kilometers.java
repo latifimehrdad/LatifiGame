@@ -55,19 +55,26 @@ public class Kilometers extends GameObject {
                 , R.drawable.kilometer_back);
 
         Bitmap img = spritesheet;
-        if (scaleFactorX > scaleFactorY) {
-            float dScale = scaleFactorX - scaleFactorY;
-            int hImg = img.getHeight() + Math.round(img.getHeight() * dScale);
-            hImg = (int) Math.round(hImg * 1.5);
-            spritesheet = Bitmap.createScaledBitmap(img, hImg, hImg, true);
-
-        } else {
-            float dScale = scaleFactorY - scaleFactorX;
-            int wImg = img.getWidth() + Math.round(img.getWidth() * dScale);
-            wImg = (int) Math.round(wImg * 1.5);
-            spritesheet = Bitmap.createScaledBitmap(img, wImg, wImg, true);
-            x = x - (spritesheet.getWidth() / 2);
-        }
+        int hImg = img.getHeight();// + Math.round(img.getHeight() * scaleFactorY);
+        int wImg = img.getWidth();// + Math.round(img.getWidth() * scaleFactorX);
+        hImg = (int) Math.round(hImg * 1.5);
+        wImg = (int) Math.round(wImg * 1.5);
+        spritesheet = Bitmap.createScaledBitmap(img, wImg, hImg, true);
+        x = x - (spritesheet.getWidth() / 2);
+//
+//        if (scaleFactorX > scaleFactorY) {
+//            //float dScale = scaleFactorX - scaleFactorY;
+//            int hImg = img.getHeight() + Math.round(img.getHeight() * dScale);
+//            hImg = (int) Math.round(hImg * 1.5);
+//            spritesheet = Bitmap.createScaledBitmap(img, hImg, hImg, true);
+//
+//        } else {
+//            //float dScale = scaleFactorY - scaleFactorX;
+//            int wImg = img.getWidth() + Math.round(img.getWidth() * dScale);
+//            wImg = (int) Math.round(wImg * 1.5);
+//            spritesheet = Bitmap.createScaledBitmap(img, wImg, wImg, true);
+//            x = x - (spritesheet.getWidth() / 2);
+//        }
 
 
         spritesheetMax = BitmapFactory.decodeResource(
@@ -75,19 +82,24 @@ public class Kilometers extends GameObject {
                 , R.drawable.kilometer_back_max);
 
         img = spritesheetMax;
-
-        if (scaleFactorX > scaleFactorY) {
-            //float dScale = scaleFactorX - scaleFactorY;
-            int hImg = img.getHeight();// + Math.round(img.getHeight() * dScale);
-            hImg = (int) Math.round(hImg * 1.5);
-            spritesheetMax = Bitmap.createScaledBitmap(img, hImg, hImg, true);
-
-        } else {
-            //float dScale = scaleFactorY - scaleFactorX;
-            int wImg = img.getWidth();// + Math.round(img.getWidth() * dScale);
-            wImg = (int) Math.round(wImg * 1.5);
-            spritesheetMax = Bitmap.createScaledBitmap(img, wImg, wImg, true);
-        }
+        hImg = img.getHeight();// + Math.round(img.getHeight() * scaleFactorY);
+        wImg = img.getWidth();// + Math.round(img.getWidth() * scaleFactorX);
+        hImg = (int) Math.round(hImg * 1.5);
+        wImg = (int) Math.round(wImg * 1.5);
+        spritesheetMax = Bitmap.createScaledBitmap(img, wImg, hImg, true);
+//
+//        if (scaleFactorX > scaleFactorY) {
+//            //float dScale = scaleFactorX - scaleFactorY;
+//            int hImg = img.getHeight() + Math.round(img.getHeight() * dScale);
+//            hImg = (int) Math.round(hImg * 1.5);
+//            spritesheetMax = Bitmap.createScaledBitmap(img, hImg, hImg, true);
+//
+//        } else {
+//            //float dScale = scaleFactorY - scaleFactorX;
+//            int wImg = img.getWidth() + Math.round(img.getWidth() * dScale);
+//            wImg = (int) Math.round(wImg * 1.5);
+//            spritesheetMax = Bitmap.createScaledBitmap(img, wImg, wImg, true);
+//        }
 
         update(0, 1f);
 

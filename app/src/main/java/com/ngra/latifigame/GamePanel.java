@@ -10,7 +10,6 @@ import android.graphics.Rect;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -25,7 +24,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
     private int SpeedLow;
     private boolean Fuel;
-    private int FuelLevel = 6;
+    private int FuelLevel = 12;
     private int FuelCounter = 0;
     private int MaxSpeed = 80;
     private int GarbageCollection = 0;
@@ -42,6 +41,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     private Background background;
     private Player player;
     private Kilometers kilometers;
+    private Fuel_Arrow fuel_arrow;
     private boolean Broken = false;
     private float scaleFactorX;
     private float scaleFactorY;
@@ -51,7 +51,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     private MediaPlayer mediaCollision;
     private int PlayerHeat = 2;
 
-    private ArrayList<Fuel> fuels;
+    private ArrayList<Fuel_Pomp> fuelPomps;
     private long fuelStarttime;
 
     private ArrayList<Missile_Benz> missile_benzs;
@@ -143,6 +143,9 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         kilometers = new Kilometers(getResources()
                 , 5, 150, 150, WIDHT / 2, getWidth(), getHeight());
 
+        fuel_arrow = new Fuel_Arrow(getResources()
+        ,35,150,150,WIDHT / 2,getWidth(),getHeight(),kilometers.x);
+
 
         if (mediaPlayer == null)
             mediaPlayer = new MediaPlayer();
@@ -228,7 +231,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
         coin_scores = new ArrayList<>();
 
-        fuels = new ArrayList<>();
+        fuelPomps = new ArrayList<>();
         fuelStarttime = System.nanoTime();
 
 
@@ -343,14 +346,14 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
 
             if (Fuel) {
-                if (FuelCounter > 900) {
+                if (FuelCounter > 500) {
                     FuelLevel--;
                     FuelCounter = 1;
                     if (FuelLevel == 0) {
                         Fuel = false;
                         SetMediaPlayer(false);
                     }
-                } else FuelCounter += player.getSpeedScore();
+                } else FuelCounter += Math.round(player.getSpeedScore() * 75 / 100);
             }
                 else {
                     if(FuelLevel > 0) {
@@ -625,13 +628,13 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
     private void CollisionGarbageCollection() {
 
-        for (int i = 0; i < fuels.size(); i++) {
-            fuels.get(i).update();
-            if (collisionScore(fuels.get(i), player)) {
-                fuels.remove(i);
-                FuelLevel += 2;
-                if(FuelLevel > 6)
-                    FuelLevel = 6;
+        for (int i = 0; i < fuelPomps.size(); i++) {
+            fuelPomps.get(i).update();
+            if (collisionScore(fuelPomps.get(i), player)) {
+                fuelPomps.remove(i);
+                FuelLevel += 3;
+                if(FuelLevel > 12)
+                    FuelLevel = 12;
 
                 GetCoinScore();
                 if(!Fuel) {
@@ -643,8 +646,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                 break;
             }
 
-            if (fuels.get(i).getY() > HEIGHT + 100) {
-                fuels.remove(i);
+            if (fuelPomps.get(i).getY() > HEIGHT + 100) {
+                fuelPomps.remove(i);
                 break;
             }
         }
@@ -709,8 +712,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             int min = 1;
             int max = WIDHT;
             int random = new Random().nextInt((max - min) + 1) + min;
-            fuels.add(
-                    new Fuel(
+            fuelPomps.add(
+                    new Fuel_Pomp(
                             getResources(),
                             random,
                             -91,
@@ -1032,8 +1035,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                 coinScore.draw(canvas);
 
 
-            for(Fuel fuel : fuels)
-                fuel.draw(canvas);
+            for(Fuel_Pomp fuelPomp : fuelPomps)
+                fuelPomp.draw(canvas);
 
             drawScoreText(canvas);
             canvas.restoreToCount(savedState);
@@ -1060,6 +1063,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
         paint.setTextAlign(Paint.Align.CENTER);
         kilometers.draw(canvas, player.getSpeedScore(), player.getScore(), paint, player.getPlaying());
+
+        fuel_arrow.draw(canvas, FuelLevel);
 //
 //
 //        paint.setTextAlign(Paint.Align.LEFT);

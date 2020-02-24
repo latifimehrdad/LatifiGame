@@ -9,7 +9,7 @@ import java.util.Random;
 
 import static com.ngra.latifigame.GamePanel.MOVESPEED;
 
-public class Fuel extends GameObject {
+public class Fuel_Pomp extends GameObject {
 
 
     private int score;
@@ -17,15 +17,15 @@ public class Fuel extends GameObject {
     private Bitmap spritesheet;
 
 
-    public Fuel(Resources resources,
-                        int x,
-                        int y,
-                        int w,
-                        int h,
-                        int s,
-                        int HalfDeviceWidth,
-                        int DeviceWidth,
-                        int DeviceHeight) {
+    public Fuel_Pomp(Resources resources,
+                     int x,
+                     int y,
+                     int w,
+                     int h,
+                     int s,
+                     int HalfDeviceWidth,
+                     int DeviceWidth,
+                     int DeviceHeight) {
 
 //        scaleFactorX = DeviceWidth / (WIDHT * 1.f);
 //        scaleFactorY = DeviceHeight / (HEIGHT * 1.f);
