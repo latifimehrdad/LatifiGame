@@ -26,7 +26,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     private boolean Fuel;
     private int FuelLevel = 12;
     private int FuelCounter = 0;
-    private int MaxSpeed = 80;
     private int GarbageCollection = 0;
     private MainActivity mainActivity;
     boolean SpeedUp = false;
@@ -244,7 +243,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         try {
             mediaPlayer = null;
             mediaPlayer = new MediaPlayer();
-            String fileName = "";
+            String fileName;
             if(Start)
                 fileName = "android.resource://" + mainActivity.getPackageName() + "/" + R.raw.truck_sound;
             else {
@@ -278,8 +277,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         if (event.getAction() == MotionEvent.ACTION_UP) {
             if (Broken) {
                 mainActivity.ResetGame();
-            } else {
-                //player.setPlaying(false);
             }
             return true;
         }
@@ -319,8 +316,9 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                         player.setSpeedScore();
                         SpeedUp = true;
                         MOVESPEED = MOVESPEED + 2;
-                        if (MOVESPEED > MaxSpeed) {
-                            MOVESPEED = MaxSpeed;
+                        int maxSpeed = 80;
+                        if (MOVESPEED > maxSpeed) {
+                            MOVESPEED = maxSpeed;
                         }
                         background.SetSpeedBackground();
                         player.SetDelayAnimation();
