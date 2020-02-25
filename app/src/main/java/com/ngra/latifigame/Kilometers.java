@@ -162,6 +162,7 @@ public class Kilometers extends GameObject {
 
 
     public void draw(Canvas canvas, double SpeedScore, int score, Paint paint, boolean playing) {
+
         try {
 
             if (MOVESPEED > 70)

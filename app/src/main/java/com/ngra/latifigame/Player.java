@@ -5,11 +5,11 @@ import android.graphics.Canvas;
 
 public class Player extends GameObject{
 
-    private double SpeedScore;
+    private static double SpeedScore = 1;
     private Bitmap spritesheet;
     private Bitmap MistakeSpritesheet;
     private int numFrames;
-    private static int score;
+    private static int score = 0;
     private boolean up;
     private int xNew;
     private boolean playing;
@@ -37,8 +37,6 @@ public class Player extends GameObject{
         y = GamePanel.HEIGHT -  (GamePanel.HEIGHT * 30 / 100) - ( h / 6);
 
         dy = 0;
-        SpeedScore = 1;
-        score = 0;
         height = h;
         width = w;
         xNew = x;

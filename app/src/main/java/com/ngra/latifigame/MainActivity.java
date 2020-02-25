@@ -35,8 +35,7 @@ public class MainActivity extends Activity {
         layout = (LinearLayout) findViewById(R.id.layout);
 
         gamePanel = new GamePanel(MainActivity.this, MainActivity.this);
-        layout.addView(gamePanel);
-        textView.setVisibility(View.GONE);
+
 
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,4 +60,26 @@ public class MainActivity extends Activity {
     }
 
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(gamePanel != null)
+            gamePanel.StopGame();
+    }
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(gamePanel != null)
+            gamePanel.StopGame();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        layout.removeAllViews();
+        layout.addView(gamePanel);
+        textView.setVisibility(View.GONE);
+    }
 }

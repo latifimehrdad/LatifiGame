@@ -85,7 +85,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     public GamePanel(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
         getHolder().addCallback(this);
-        thread = new MainThread(getHolder(), this);
         setFocusable(true);
     }
 
@@ -95,9 +94,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         scaleFactorX = getWidth() / (WIDHT * 1.f);
         scaleFactorY = getHeight() / (HEIGHT * 1.f);
         Broken = false;
-        MOVESPEED = 5;
         getHolder().addCallback(this);
-        thread = new MainThread(getHolder(), this);
         setFocusable(true);
     }
 
@@ -129,6 +126,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
 
+        thread = new MainThread(getHolder(), this);
         Fuel = true;
         background = new Background(BitmapFactory.decodeResource(getResources(), R.drawable.road2));
         player = new Player(BitmapFactory.decodeResource(getResources(), R.drawable.player),
@@ -143,7 +141,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                 , 5, 150, 150, WIDHT / 2, getWidth(), getHeight());
 
         fuel_arrow = new Fuel_Arrow(getResources()
-        ,35,150,150,WIDHT / 2,getWidth(),getHeight(),kilometers.x);
+                , 35, 150, 150, WIDHT / 2, getWidth(), getHeight(), kilometers.x);
 
 
         if (mediaPlayer == null)
@@ -239,12 +237,39 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     }
 
 
+
+
+
+    public void StopGame() {
+
+        if (mediaPlayer.isPlaying()) {
+            mediaPlayer.stop();
+        }
+
+        if (mediaCollision.isPlaying()) {
+            mediaCollision.stop();
+        }
+
+        if (mediaBip.isPlaying()) {
+            mediaBip.stop();
+        }
+
+        if (mediaCoin.isPlaying()) {
+            mediaCoin.stop();
+        }
+
+        thread.setRunning(false);
+        player.setPlaying(false);
+    }
+
+
+
     private void SetMediaPlayer(Boolean Start) {
         try {
             mediaPlayer = null;
             mediaPlayer = new MediaPlayer();
             String fileName;
-            if(Start)
+            if (Start)
                 fileName = "android.resource://" + mainActivity.getPackageName() + "/" + R.raw.truck_sound;
             else {
                 fileName = "android.resource://" + mainActivity.getPackageName() + "/" + R.raw.truck_restart;
@@ -333,7 +358,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                     player.setLowOfSpeedScore();
                     background.SetSpeedBackground();
                     player.SetLowOfDelayAnimation();
-                    if(MOVESPEED < 1) {
+                    if (MOVESPEED < 1) {
                         player.setPlaying(false);
                         Broken = true;
                     }
@@ -352,26 +377,23 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                         SetMediaPlayer(false);
                     }
                 } else FuelCounter += Math.round(player.getSpeedScore() * 75 / 100);
+            } else {
+                if (FuelLevel > 0) {
+                    if (FuelCounter > 100) {
+                        Fuel = true;
+                        FuelCounter = 0;
+                        if (MOVESPEED > 11)
+                            mediaPlayer.seekTo(10 * 1000);
+                        if (MOVESPEED > 17)
+                            mediaPlayer.seekTo(20 * 1000);
+                        if (MOVESPEED > 25)
+                            mediaPlayer.seekTo(40 * 1000);
+                        if (MOVESPEED > 37)
+                            mediaPlayer.seekTo(120 * 1000);
+                    } else
+                        FuelCounter += player.getSpeedScore();
+                }
             }
-                else {
-                    if(FuelLevel > 0) {
-                        if(FuelCounter > 100) {
-                            Fuel = true;
-                            FuelCounter = 0;
-                            if (MOVESPEED > 11)
-                                mediaPlayer.seekTo(10 * 1000);
-                            if (MOVESPEED > 17)
-                                mediaPlayer.seekTo(20 * 1000);
-                            if (MOVESPEED > 25)
-                                mediaPlayer.seekTo(40 * 1000);
-                            if (MOVESPEED > 37)
-                                mediaPlayer.seekTo(120 * 1000);
-                        } else
-                            FuelCounter += player.getSpeedScore();
-                    }
-            }
-
-
 
 
             if (MOVESPEED > 1) {
@@ -607,7 +629,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         }
 
         if (GarbageCollection < 0) {
-            if(PlayerHeat <= 0) {
+            if (PlayerHeat <= 0) {
                 Broken = true;
                 player.setPlaying(false);
                 mediaPlayer.stop();
@@ -631,14 +653,13 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             if (collisionScore(fuelPomps.get(i), player)) {
                 fuelPomps.remove(i);
                 FuelLevel += 3;
-                if(FuelLevel > 12)
+                if (FuelLevel > 12)
                     FuelLevel = 12;
 
                 GetCoinScore();
-                if(!Fuel) {
+                if (!Fuel) {
                     SetMediaPlayer(true);
-                } else
-                {
+                } else {
                     CoinSound();
                 }
                 break;
@@ -703,8 +724,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     }
 
 
-
-    private void DrawFuel(){
+    private void DrawFuel() {
         long fuelElapsed = (System.nanoTime() - fuelStarttime) / 1000000;
         if (fuelElapsed > (2000) - player.getScore() / 4) {
             int min = 1;
@@ -725,7 +745,6 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             );
         }
     }
-
 
 
     private void DrawGarbage() {
@@ -1033,7 +1052,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                 coinScore.draw(canvas);
 
 
-            for(Fuel_Pomp fuelPomp : fuelPomps)
+            for (Fuel_Pomp fuelPomp : fuelPomps)
                 fuelPomp.draw(canvas);
 
             drawScoreText(canvas);
