@@ -46,6 +46,9 @@ public class MainActivity extends Activity {
                 }
 
                 textView.setVisibility(View.GONE);
+                GamePanel.MOVESPEED = 5;
+                Player.SpeedScore = 1;
+                Player.score = 0;
                 gamePanel = new GamePanel(MainActivity.this, MainActivity.this);
                 layout.addView(gamePanel);
             }

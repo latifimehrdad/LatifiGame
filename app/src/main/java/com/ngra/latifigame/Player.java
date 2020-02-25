@@ -5,11 +5,11 @@ import android.graphics.Canvas;
 
 public class Player extends GameObject{
 
-    private static double SpeedScore = 1;
+    public static double SpeedScore = 1;
     private Bitmap spritesheet;
     private Bitmap MistakeSpritesheet;
     private int numFrames;
-    private static int score = 0;
+    public static int score = 0;
     private boolean up;
     private int xNew;
     private boolean playing;

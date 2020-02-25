@@ -639,6 +639,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             } else {
                 player.setPlaying(false);
                 PlayerHeat--;
+                FuelLevel = 12;
                 GarbageCollection = 0;
             }
         }
@@ -981,6 +982,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     public boolean collisionMissile(GameObject a, GameObject b) {
         if (Rect.intersects(a.getRectangle(), b.getRectangle())) {
             PlayerHeat--;
+            FuelLevel = 12;
             if (PlayerHeat <= 0) {
                 player.setPlaying(false);
                 Broken = true;
