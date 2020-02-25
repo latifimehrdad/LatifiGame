@@ -7,8 +7,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.os.Handler;
-import android.util.Log;
 
 import static com.ngra.latifigame.GamePanel.HEIGHT;
 import static com.ngra.latifigame.GamePanel.MOVESPEED;
@@ -154,7 +152,7 @@ public class Kilometers extends GameObject {
     }
 
 
-    public Bitmap RotateBitmap(Bitmap source, float angle) {
+    private Bitmap RotateBitmap(Bitmap source, float angle) {
         Matrix matrix = new Matrix();
         matrix.postRotate(angle);
         return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
