@@ -237,31 +237,31 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     }
 
 
-
-
-
     public void StopGame() {
 
-        if (mediaPlayer.isPlaying()) {
-            mediaPlayer.stop();
-        }
+        if (mediaPlayer != null)
+            if (mediaPlayer.isPlaying()) {
+                mediaPlayer.stop();
+            }
 
-        if (mediaCollision.isPlaying()) {
-            mediaCollision.stop();
-        }
+        if (mediaCollision != null)
+            if (mediaCollision.isPlaying()) {
+                mediaCollision.stop();
+            }
 
-        if (mediaBip.isPlaying()) {
-            mediaBip.stop();
-        }
+        if (mediaBip != null)
+            if (mediaBip.isPlaying()) {
+                mediaBip.stop();
+            }
 
-        if (mediaCoin.isPlaying()) {
-            mediaCoin.stop();
-        }
+        if (mediaCoin != null)
+            if (mediaCoin.isPlaying()) {
+                mediaCoin.stop();
+            }
 
         thread.setRunning(false);
         player.setPlaying(false);
     }
-
 
 
     private void SetMediaPlayer(Boolean Start) {
@@ -360,7 +360,9 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                     player.SetLowOfDelayAnimation();
                     if (MOVESPEED < 1) {
                         player.setPlaying(false);
-                        Broken = true;
+                        PlayerHeat--;
+                        FuelLevel = 12;
+                        MOVESPEED = 7;
                     }
 
                 } else
