@@ -27,7 +27,6 @@ public class Kilometers extends GameObject {
     private Resources resources;
 
     public Kilometers(Resources resources,
-                      int y,
                       int w,
                       int h,
                       int HalfDeviceWidth,
@@ -38,8 +37,8 @@ public class Kilometers extends GameObject {
         scaleFactorX = DeviceWidth / (WIDHT * 1.f);
         scaleFactorY = DeviceHeight / (HEIGHT * 1.f);
 
-        super.x = HalfDeviceWidth;
-        super.y = y;
+        super.x = 25;
+        super.y = DeviceHeight;
         width = w;
         height = h;
 
@@ -55,10 +54,10 @@ public class Kilometers extends GameObject {
         Bitmap img = spritesheet;
         int hImg = img.getHeight();// + Math.round(img.getHeight() * scaleFactorY);
         int wImg = img.getWidth();// + Math.round(img.getWidth() * scaleFactorX);
-        hImg = (int) Math.round(hImg * 1.5);
-        wImg = (int) Math.round(wImg * 1.5);
+        hImg = (int) Math.round(hImg * 1.2);
+        wImg = (int) Math.round(wImg * 1.2);
         spritesheet = Bitmap.createScaledBitmap(img, wImg, hImg, true);
-        x = x - (spritesheet.getWidth() / 2);
+        y = y - spritesheet.getHeight() - 10;
 //
 //        if (scaleFactorX > scaleFactorY) {
 //            //float dScale = scaleFactorX - scaleFactorY;
@@ -82,8 +81,8 @@ public class Kilometers extends GameObject {
         img = spritesheetMax;
         hImg = img.getHeight();// + Math.round(img.getHeight() * scaleFactorY);
         wImg = img.getWidth();// + Math.round(img.getWidth() * scaleFactorX);
-        hImg = (int) Math.round(hImg * 1.5);
-        wImg = (int) Math.round(wImg * 1.5);
+        hImg = (int) Math.round(hImg * 1.2);
+        wImg = (int) Math.round(wImg * 1.2);
         spritesheetMax = Bitmap.createScaledBitmap(img, wImg, hImg, true);
 //
 //        if (scaleFactorX > scaleFactorY) {
@@ -117,15 +116,15 @@ public class Kilometers extends GameObject {
                 float dScale = Math.abs(scaleFactorY - scaleFactorX);
                 int hImg = arrow.getHeight() + Math.round(arrow.getHeight() * dScale);
                 int wImg = arrow.getWidth();
-                hImg = (int) Math.round(hImg * 1.5);
-                wImg = (int) Math.round(wImg * 1.5);
+                hImg = (int) Math.round(hImg * 1.2);
+                wImg = (int) Math.round(wImg * 1.2);
                 Arrow = Bitmap.createScaledBitmap(arrow, wImg, hImg, true);
             } else {
                 float dScale = Math.abs(scaleFactorY - scaleFactorX);
                 int hImg = arrow.getHeight();
                 int wImg = arrow.getWidth() + Math.round(arrow.getWidth() * dScale);
-                hImg = (int) Math.round(hImg * 1.5);
-                wImg = (int) Math.round(wImg * 1.5);
+                hImg = (int) Math.round(hImg * 1.2);
+                wImg = (int) Math.round(wImg * 1.2);
                 Arrow = Bitmap.createScaledBitmap(arrow, wImg, hImg, true);
             }
 
@@ -136,15 +135,15 @@ public class Kilometers extends GameObject {
                 float dScale = Math.abs(scaleFactorY - scaleFactorX);
                 int hImg = arrow.getHeight() + Math.round(arrow.getHeight() * dScale);
                 int wImg = arrow.getWidth();
-                hImg = (int) Math.round(hImg * 1.5);
-                wImg = (int) Math.round(wImg * 1.5);
+                hImg = (int) Math.round(hImg * 1.2);
+                wImg = (int) Math.round(wImg * 1.2);
                 Arrow = Bitmap.createScaledBitmap(arrow, wImg, hImg, true);
             } else {
                 float dScale = Math.abs(scaleFactorY - scaleFactorX);
                 int hImg = arrow.getHeight();
                 int wImg = arrow.getWidth() + Math.round(arrow.getWidth() * dScale);
-                hImg = (int) Math.round(hImg * 1.5);
-                wImg = (int) Math.round(wImg * 1.5);
+                hImg = (int) Math.round(hImg * 1.2);
+                wImg = (int) Math.round(wImg * 1.2);
                 Arrow = Bitmap.createScaledBitmap(arrow, wImg, hImg, true);
             }
         }
@@ -169,7 +168,7 @@ public class Kilometers extends GameObject {
                 canvas.drawBitmap(spritesheet, x, y, null);
             int xArrow = x + ((spritesheet.getWidth() - Arrow.getWidth()) / 2);
             int yArrow = y + ((spritesheet.getHeight() - Arrow.getHeight()) / 2);
-            if (score > 35 && playing)
+            if (score > 15 && playing)
                 update(MOVESPEED, (float) SpeedScore);
             canvas.drawBitmap(Arrow, xArrow, yArrow, null);
             paint.setColor(Color.BLACK);

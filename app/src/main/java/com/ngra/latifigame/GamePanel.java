@@ -35,7 +35,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     public static int WIDHT = 720;
     public static int HEIGHT = 1280;
     public static int HalfDeviceWidth = 0;
-    public static int MOVESPEED = 5;
+    public static int MOVESPEED = 10;
     private MainThread thread;
     private Background background;
     private Player player;
@@ -138,10 +138,11 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                 getHeight());
 
         kilometers = new Kilometers(getResources()
-                , 5, 150, 150, WIDHT / 2, getWidth(), getHeight());
+                , 150, 150, WIDHT / 2, getWidth(), getHeight());
 
         fuel_arrow = new Fuel_Arrow(getResources()
-                , 35, 150, 150, WIDHT / 2, getWidth(), getHeight(), kilometers.x);
+                , 150, 150, WIDHT / 2, getWidth(), getHeight(), kilometers.getX(),
+                kilometers.getWidth());
 
 
         if (mediaPlayer == null)
@@ -292,6 +293,14 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             if (!player.getPlaying() && !Broken) {
                 SetMediaPlayer(true);
                 player.setPlaying(true);
+                if (MOVESPEED > 11)
+                    mediaPlayer.seekTo(10 * 1000);
+                if (MOVESPEED > 17)
+                    mediaPlayer.seekTo(20 * 1000);
+                if (MOVESPEED > 25)
+                    mediaPlayer.seekTo(40 * 1000);
+                if (MOVESPEED > 37)
+                    mediaPlayer.seekTo(120 * 1000);
             } else if (Broken) {
                 mainActivity.ResetGame();
             }
@@ -352,7 +361,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                     SpeedUp = false;
             } else {
                 SpeedUp = false;
-                if (SpeedLow == 50) {
+                if (SpeedLow >= 20) {
                     SpeedLow = 0;
                     MOVESPEED = MOVESPEED - 2;
                     player.setLowOfSpeedScore();
@@ -362,7 +371,10 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                         player.setPlaying(false);
                         PlayerHeat--;
                         FuelLevel = 12;
-                        MOVESPEED = 7;
+                        MOVESPEED = 10;
+                        background.SetSpeedBackground();
+                        for(int i = 0 ; i < 6 ; i++)
+                            player.setSpeedScore();
                     }
 
                 } else
@@ -1068,20 +1080,21 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     private void drawScoreText(Canvas canvas) {
         Paint paint = new Paint();
         paint.setColor(Color.LTGRAY);
-        paint.setTextSize(20);
+        paint.setTextSize(40);
         paint.setTypeface(mainActivity.textView.getTypeface());
         paint.setTextAlign(Paint.Align.RIGHT);
 
-        canvas.drawBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.single_coin), WIDHT - 53, 10, null);
-        canvas.drawText(String.valueOf(GarbageCollection), WIDHT - 60, 30, paint);
+        canvas.drawBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.single_coin), WIDHT - 75, 10, null);
+        canvas.drawText(String.valueOf(GarbageCollection), WIDHT - 80, 50, paint);
 
 
         int left = 30;
         for (int i = 0; i < PlayerHeat; i++) {
             canvas.drawBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.heart), left, 10, null);
-            left += 40;
+            left += 65;
         }
 
+        paint.setTextSize(16);
         paint.setTextAlign(Paint.Align.CENTER);
         kilometers.draw(canvas, player.getSpeedScore(), player.getScore(), paint, player.getPlaying());
 

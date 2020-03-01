@@ -26,20 +26,20 @@ public class Fuel_Arrow extends GameObject {
     private Resources resources;
 
     public Fuel_Arrow(Resources resources,
-                      int y,
                       int w,
                       int h,
                       int HalfDeviceWidth,
                       int DeviceWidth,
                       int DeviceHeight,
-                      int KilometersX) {
+                      int KilometersX,
+                      int KilometersW) {
 
         this.resources = resources;
         scaleFactorX = DeviceWidth / (WIDHT * 1.f);
         scaleFactorY = DeviceHeight / (HEIGHT * 1.f);
 
-        super.x = HalfDeviceWidth;
-        super.y = y;
+        super.x = KilometersX + KilometersW;
+        super.y = DeviceHeight;
         width = w;
         height = h;
 
@@ -55,10 +55,11 @@ public class Fuel_Arrow extends GameObject {
         Bitmap img = spritesheet;
         int hImg = img.getHeight();// + Math.round(img.getHeight() * scaleFactorY);
         int wImg = img.getWidth();// + Math.round(img.getWidth() * scaleFactorX);
-//        hImg = (int) Math.round(hImg * 1.5);
-//        wImg = (int) Math.round(wImg * 1.5);
+        hImg = (int) Math.round(hImg * 0.8);
+        wImg = (int) Math.round(wImg * 0.8);
         spritesheet = Bitmap.createScaledBitmap(img, wImg, hImg, true);
-        x = KilometersX - width;
+        x = x + 30;
+        y = y - height - 10;
 //
 //        if (scaleFactorX > scaleFactorY) {
 //            //float dScale = scaleFactorX - scaleFactorY;
@@ -103,15 +104,15 @@ public class Fuel_Arrow extends GameObject {
             float dScale = Math.abs(scaleFactorY - scaleFactorX);
             int hImg = arrow.getHeight() + Math.round(arrow.getHeight() * dScale);
             int wImg = arrow.getWidth();
-//            hImg = (int) Math.round(hImg * 1.5);
-//            wImg = (int) Math.round(wImg * 1.5);
+            hImg = (int) Math.round(hImg * 0.8);
+            wImg = (int) Math.round(wImg * 0.8);
             Arrow = Bitmap.createScaledBitmap(arrow, wImg, hImg, true);
         } else {
             float dScale = Math.abs(scaleFactorY - scaleFactorX);
             int hImg = arrow.getHeight();
             int wImg = arrow.getWidth() + Math.round(arrow.getWidth() * dScale);
-//            hImg = (int) Math.round(hImg * 1.5);
-//            wImg = (int) Math.round(wImg * 1.5);
+            hImg = (int) Math.round(hImg * 0.8);
+            wImg = (int) Math.round(wImg * 0.8);
             Arrow = Bitmap.createScaledBitmap(arrow, wImg, hImg, true);
         }
 
