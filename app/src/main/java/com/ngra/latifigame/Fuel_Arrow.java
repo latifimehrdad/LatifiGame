@@ -46,20 +46,21 @@ public class Fuel_Arrow extends GameObject {
 
         FuelArrow = BitmapFactory.decodeResource(
                 resources
-                , R.drawable.fuel_arrow);
+                , R.drawable.fuel_arrow2);
 
         spritesheet = BitmapFactory.decodeResource(
                 resources
-                , R.drawable.fuel_background);
+                , R.drawable.fuel_background2);
 
         Bitmap img = spritesheet;
         int hImg = img.getHeight();// + Math.round(img.getHeight() * scaleFactorY);
         int wImg = img.getWidth();// + Math.round(img.getWidth() * scaleFactorX);
-        hImg = (int) Math.round(hImg * 0.8);
-        wImg = (int) Math.round(wImg * 0.8);
+        hImg = (int) Math.round(hImg * 0.7);
+        wImg = (int) Math.round(wImg * 0.7);
         spritesheet = Bitmap.createScaledBitmap(img, wImg, hImg, true);
         x = x + 30;
-        y = y - height - 10;
+        int round = (int) Math.round(spritesheet.getHeight() / 1.2);
+        y = y - round - 10;
 //
 //        if (scaleFactorX > scaleFactorY) {
 //            //float dScale = scaleFactorX - scaleFactorY;
@@ -104,15 +105,15 @@ public class Fuel_Arrow extends GameObject {
             float dScale = Math.abs(scaleFactorY - scaleFactorX);
             int hImg = arrow.getHeight() + Math.round(arrow.getHeight() * dScale);
             int wImg = arrow.getWidth();
-            hImg = (int) Math.round(hImg * 0.8);
-            wImg = (int) Math.round(wImg * 0.8);
+            hImg = (int) Math.round(hImg * 0.7);
+            wImg = (int) Math.round(wImg * 0.7);
             Arrow = Bitmap.createScaledBitmap(arrow, wImg, hImg, true);
         } else {
             float dScale = Math.abs(scaleFactorY - scaleFactorX);
             int hImg = arrow.getHeight();
             int wImg = arrow.getWidth() + Math.round(arrow.getWidth() * dScale);
-            hImg = (int) Math.round(hImg * 0.8);
-            wImg = (int) Math.round(wImg * 0.8);
+            hImg = (int) Math.round(hImg * 0.7);
+            wImg = (int) Math.round(wImg * 0.7);
             Arrow = Bitmap.createScaledBitmap(arrow, wImg, hImg, true);
         }
 
