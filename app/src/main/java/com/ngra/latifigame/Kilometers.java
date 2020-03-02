@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.util.Log;
 
 import static com.ngra.latifigame.GamePanel.HEIGHT;
 import static com.ngra.latifigame.GamePanel.MOVESPEED;
@@ -15,14 +16,14 @@ import static com.ngra.latifigame.GamePanel.WIDHT;
 public class Kilometers extends GameObject {
 
     private Bitmap spritesheet;
-    private Bitmap spritesheetMax;
+//    private Bitmap spritesheetMax;
 
 
     private float scaleFactorX;
     private float scaleFactorY;
     private Bitmap KilometerArrow;
     private Bitmap Arrow;
-    private float degree = -20;
+    private float degree = -10;
     private float NewDegree = -22;
     private Resources resources;
 
@@ -45,7 +46,7 @@ public class Kilometers extends GameObject {
 
         KilometerArrow = BitmapFactory.decodeResource(
                 resources
-                , R.drawable.kilometer_arrow);
+                , R.drawable.kilometer_arrow2);
 
         spritesheet = BitmapFactory.decodeResource(
                 resources
@@ -57,7 +58,8 @@ public class Kilometers extends GameObject {
         hImg = (int) Math.round(hImg * 1.2);
         wImg = (int) Math.round(wImg * 1.2);
         spritesheet = Bitmap.createScaledBitmap(img, wImg, hImg, true);
-        y = y - spritesheet.getHeight() - 10;
+        int round = (int) Math.round(spritesheet.getHeight() / 1.4);
+        y = y - round - 10;
 //
 //        if (scaleFactorX > scaleFactorY) {
 //            //float dScale = scaleFactorX - scaleFactorY;
@@ -74,16 +76,16 @@ public class Kilometers extends GameObject {
 //        }
 
 
-        spritesheetMax = BitmapFactory.decodeResource(
-                resources
-                , R.drawable.kilometer_back_max);
-
-        img = spritesheetMax;
-        hImg = img.getHeight();// + Math.round(img.getHeight() * scaleFactorY);
-        wImg = img.getWidth();// + Math.round(img.getWidth() * scaleFactorX);
-        hImg = (int) Math.round(hImg * 1.2);
-        wImg = (int) Math.round(wImg * 1.2);
-        spritesheetMax = Bitmap.createScaledBitmap(img, wImg, hImg, true);
+//        spritesheetMax = BitmapFactory.decodeResource(
+//                resources
+//                , R.drawable.kilometer_back_max);
+//
+//        img = spritesheetMax;
+//        hImg = img.getHeight();// + Math.round(img.getHeight() * scaleFactorY);
+//        wImg = img.getWidth();// + Math.round(img.getWidth() * scaleFactorX);
+//        hImg = (int) Math.round(hImg * 1.2);
+//        wImg = (int) Math.round(wImg * 1.2);
+//        spritesheetMax = Bitmap.createScaledBitmap(img, wImg, hImg, true);
 //
 //        if (scaleFactorX > scaleFactorY) {
 //            //float dScale = scaleFactorX - scaleFactorY;
@@ -106,11 +108,12 @@ public class Kilometers extends GameObject {
 
     public void update(int speed, float SpeedScore) {
 
-        int sorat = (speed * 2) - 20;
-        sorat = sorat * 90;
-        NewDegree = sorat / 60;
+        int sorat = (speed * 2) - 10;
+        NewDegree = sorat;
         if (NewDegree > degree) {
-            degree += 0.03 * SpeedScore;
+            if(degree >= NewDegree)
+                return;
+            degree += 0.05 * SpeedScore;
             Bitmap arrow = RotateBitmap(KilometerArrow, degree);
             if (scaleFactorY > scaleFactorX) {
                 float dScale = Math.abs(scaleFactorY - scaleFactorX);
@@ -162,17 +165,17 @@ public class Kilometers extends GameObject {
 
         try {
 
-            if (MOVESPEED > 70)
-                canvas.drawBitmap(spritesheetMax, x, y, null);
-            else
-                canvas.drawBitmap(spritesheet, x, y, null);
+//            if (MOVESPEED > 70)
+//                canvas.drawBitmap(spritesheetMax, x, y, null);
+//            else
+            canvas.drawBitmap(spritesheet, x, y, null);
             int xArrow = x + ((spritesheet.getWidth() - Arrow.getWidth()) / 2);
             int yArrow = y + ((spritesheet.getHeight() - Arrow.getHeight()) / 2);
             if (score > 15 && playing)
                 update(MOVESPEED, (float) SpeedScore);
             canvas.drawBitmap(Arrow, xArrow, yArrow, null);
             paint.setColor(Color.BLACK);
-            canvas.drawText(String.valueOf(score), xArrow + Arrow.getWidth() / 2, y + spritesheet.getHeight() - (Math.round(spritesheet.getHeight() / 4.5)), paint);
+            canvas.drawText(String.valueOf(score), xArrow + Arrow.getWidth() / 2, y + spritesheet.getHeight() - (Math.round(spritesheet.getHeight() / 3.8)), paint);
 
         } catch (Exception e) {
             e.printStackTrace();
