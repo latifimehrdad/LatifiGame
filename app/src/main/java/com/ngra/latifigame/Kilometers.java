@@ -38,7 +38,7 @@ public class Kilometers extends GameObject {
         scaleFactorY = DeviceHeight / (HEIGHT * 1.f);
 
         super.x = 25;
-        super.y = DeviceHeight;
+        super.y = HEIGHT;
         width = w;
         height = h;
 

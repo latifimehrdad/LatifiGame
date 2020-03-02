@@ -39,7 +39,7 @@ public class Fuel_Arrow extends GameObject {
         scaleFactorY = DeviceHeight / (HEIGHT * 1.f);
 
         super.x = KilometersX + KilometersW;
-        super.y = DeviceHeight;
+        super.y = HEIGHT;
         width = w;
         height = h;
 
