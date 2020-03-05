@@ -174,7 +174,7 @@ public class Kilometers extends GameObject {
             if (score > 15 && playing)
                 update(MOVESPEED, (float) SpeedScore);
             canvas.drawBitmap(Arrow, xArrow, yArrow, null);
-            paint.setColor(Color.BLACK);
+            paint.setColor(Color.YELLOW);
             canvas.drawText(String.valueOf(score), xArrow + Arrow.getWidth() / 2, y + spritesheet.getHeight() - (Math.round(spritesheet.getHeight() / 3.8)), paint);
 
         } catch (Exception e) {

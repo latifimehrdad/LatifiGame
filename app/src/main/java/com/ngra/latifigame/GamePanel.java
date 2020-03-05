@@ -22,6 +22,9 @@ import java.util.Random;
 public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
 
+    private int randomMisstake = 0;
+    private int randomScore = 0;
+    private int randomMissile = 0;
     private int SpeedLow;
     private boolean Fuel;
     private int FuelLevel = 12;
@@ -61,6 +64,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     private long missileCorvateStartTime;
     private ArrayList<Missile_Lambo> missile_lambos;
     private long missileLambostartTime;
+    private ArrayList<Missile_Police> missile_polices;
+    private long missilePoliceStartTime;
 
 
     private ArrayList<Score_Coca> score_cocas;
@@ -231,6 +236,9 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
         fuelPomps = new ArrayList<>();
         fuelStarttime = System.nanoTime();
+
+        missile_polices = new ArrayList<>();
+        missilePoliceStartTime = System.nanoTime();
 
 
         thread.setRunning(true);
@@ -574,6 +582,21 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         }
 
 
+        for (int i = 0; i < missile_polices.size(); i++) {
+            missile_polices.get(i).update();
+            if (collisionMissile(missile_polices.get(i), player)) {
+                missile_polices.remove(i);
+                player.MistakeCollection();
+                player.setPlaying(false);
+                break;
+            }
+
+            if (missile_polices.get(i).getY() > HEIGHT + 100) {
+                missile_polices.remove(i);
+                break;
+            }
+        }
+
         for (int i = 0; i < missile_lambos.size(); i++) {
             missile_lambos.get(i).update();
             if (collisionMissile(missile_lambos.get(i), player)) {
@@ -597,7 +620,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             mistake_recyclerBins.get(i).update();
             if (collisionScore(mistake_recyclerBins.get(i), player)) {
                 mistake_recyclerBins.remove(i);
-                GarbageCollection -= 3;
+                GarbageCollection -= 20;
                 mediaBip.start();
                 player.MistakeCollection();
                 break;
@@ -613,7 +636,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             mistake_babyDiapers.get(i).update();
             if (collisionScore(mistake_babyDiapers.get(i), player)) {
                 mistake_babyDiapers.remove(i);
-                GarbageCollection -= 3;
+                GarbageCollection -= 20;
                 mediaBip.start();
                 player.MistakeCollection();
                 break;
@@ -630,7 +653,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             mistake_chips.get(i).update();
             if (collisionScore(mistake_chips.get(i), player)) {
                 mistake_chips.remove(i);
-                GarbageCollection -= 3;
+                GarbageCollection -= 20;
                 mediaBip.start();
                 player.MistakeCollection();
                 break;
@@ -690,7 +713,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             score_cocas.get(i).update();
             if (collisionScore(score_cocas.get(i), player)) {
                 score_cocas.remove(i);
-                GarbageCollection += 3;
+                GarbageCollection += 15;
                 CoinSound();
                 GetCoinScore();
                 break;
@@ -707,7 +730,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             score_paperBoxes.get(i).update();
             if (collisionScore(score_paperBoxes.get(i), player)) {
                 score_paperBoxes.remove(i);
-                GarbageCollection++;
+                GarbageCollection+= 5;
                 CoinSound();
                 GetCoinScore();
                 break;
@@ -724,7 +747,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             score_bottles.get(i).update();
             if (collisionScore(score_bottles.get(i), player)) {
                 score_bottles.remove(i);
-                GarbageCollection += 2;
+                GarbageCollection += 10;
                 CoinSound();
                 GetCoinScore();
                 break;
@@ -766,6 +789,10 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         int min = 1;
         int max = 3;
         int random = new Random().nextInt((max - min) + 1) + min;
+        while (randomScore == random){
+            random = new Random().nextInt((max - min) + 1) + min;
+        }
+        randomScore = random;
         if (random == 1) {
             long scoreCocaElapsed = (System.nanoTime() - scoreColaStatTime) / 1000000;
             if (scoreCocaElapsed > (2000) - player.getScore() / 4) {
@@ -834,6 +861,10 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
         int min = 1;
         int max = 3;
         int random = new Random().nextInt((max - min) + 1) + min;
+        while (randomMisstake == random){
+            random = new Random().nextInt((max - min) + 1) + min;
+        }
+        randomMisstake = random;
         if (random == 1) {
             long mistakeRecyclerElapsed = (System.nanoTime() - mistakeRecyclerBinStartTime) / 1000000;
             if (mistakeRecyclerElapsed > (2000) - player.getScore() / 4) {
@@ -901,8 +932,12 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
     private void DrawMissiles() {
         int min = 1;
-        int max = 4;
+        int max = 5;
         int random = new Random().nextInt((max - min) + 1) + min;
+        while (randomMissile == random){
+            random = new Random().nextInt((max - min) + 1) + min;
+        }
+        randomMissile = random;
         if (random == 1) {
             long missileBenzElapsed = (System.nanoTime() - missileBenzStartTime) / 1000000;
             if (missileBenzElapsed > (2000) - player.getScore() / 4) {
@@ -968,7 +1003,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                         )
                 );
             }
-        } else {
+        } else if (random == 4){
             long missileLamboElapsed = (System.nanoTime() - missileLambostartTime) / 1000000;
             if (missileLamboElapsed > (2000) - player.getScore() / 4) {
                 min = 1;
@@ -981,6 +1016,27 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                                 -166,
                                 80,
                                 166,
+                                player.getScore(),
+                                4,
+                                HalfDeviceWidth,
+                                getWidth(),
+                                getHeight()
+                        )
+                );
+            }
+        } else {
+            long missilePoliceElapsed = (System.nanoTime() - missilePoliceStartTime) / 1000000;
+            if (missilePoliceElapsed > (2000) - player.getScore() / 4) {
+                min = 1;
+                max = WIDHT;
+                random = new Random().nextInt((max - min) + 1) + min;
+                missile_polices.add(
+                        new Missile_Police(
+                                getResources(),
+                                random,
+                                -166,
+                                80,
+                                160,
                                 player.getScore(),
                                 4,
                                 HalfDeviceWidth,
@@ -1071,6 +1127,9 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             for (Fuel_Pomp fuelPomp : fuelPomps)
                 fuelPomp.draw(canvas);
 
+            for(Missile_Police police : missile_polices)
+                police.draw(canvas);
+
             drawScoreText(canvas);
             canvas.restoreToCount(savedState);
         }
@@ -1094,7 +1153,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             left += 65;
         }
 
-        paint.setTextSize(16);
+        paint.setTextSize(18);
         paint.setTextAlign(Paint.Align.CENTER);
         kilometers.draw(canvas, player.getSpeedScore(), player.getScore(), paint, player.getPlaying());
 
