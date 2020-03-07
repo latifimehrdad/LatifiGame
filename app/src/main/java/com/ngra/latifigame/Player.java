@@ -15,7 +15,7 @@ public class Player extends GameObject{
     private boolean playing;
     private Animation animation = new Animation();
     private long startTime;
-    private int Delay = 350;
+    private int Delay = 280;
     private int SpeedMove = 25;
     private int Mistake = 0;
 //    private float scaleFactorX;
